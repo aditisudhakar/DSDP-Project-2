@@ -53,6 +53,39 @@ matrix colnames results = chi2 p_value cramer_v
 matrix list results
 
 
+//Most of the variables show statistically significant results (p value = 0 or close to 0), meaning that there is evidence of some relationship between cr058 and most of the variables, but the strength of the association varies.
+
+//The variable cr054s9 (presence of a mental health condition) has the strongest association with loneliness (cr058) (Cramer's V = 0.2339). In large datasets, a cramer v of 0.25 suggest strong correlation. The high chi square value also indicates a highly significant relationship.
+
+//Similarly, lr026a (married or with partner) (Cramer V = 0.2243) is another variable with a very strong association. Similarly for cr056e (depression) (Cramer's V = 0.2107). 'maritalstatus' has a significant relationship (Chi2 = 8667.1682) and a moderate association (Cramer's V = 0.1351). ei002 (food insecurity) has a moderately strong association  with cr058.
+
+//There are some variables like lr026 (interaction with another person within 6 feet distance)(Cramer's V = 0.0319) where the association is weak but still statistically significant (p < 0.05). ei008 (owe money on student loans)(Cramer's V = 0.0795) and 'working' (Cramer V = 0.0680) both show moderate relationships with cr058.
+
+//gender and hhincome also show some moderate associations, indicating that these variables have a meaningful but not very strong relationship with cr058.
+
+//Overall, most of the associations between loneliness and the other variables are weak. We might be able to observe better associations by using regression modelling. However, as the data is panel data with multiple entries per respondent, we will perform longitudinal analysis.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//set up panel
+xtset uasid wave
 
 
 
