@@ -53,21 +53,38 @@ matrix colnames results = chi2 p_value cramer_v
 matrix list results
 
 
-//Most of the variables show statistically significant results (p value = 0 or close to 0), meaning that there is evidence of some relationship between cr058 and most of the variables, but the strength of the association varies.
+//Most of the variables show statistically significant results (p value = 0 or close to
+//0), meaning that there is evidence of some relationship between cr058 and most of the
+//variables, but the strength of the association varies.
 
-//The variable cr054s9 (presence of a mental health condition) has the strongest association with loneliness (cr058) (Cramer's V = 0.2339). In large datasets, a cramer v of 0.25 suggest strong correlation. The high chi square value also indicates a highly significant relationship.
+//The variable cr054s9 (presence of a mental health condition) has the strongest
+//association with loneliness (cr058) (Cramer's V = 0.2339). In large datasets, a cramer
+//v of 0.25 suggest strong correlation. The high chi square value also indicates a
+//highly significant relationship.
 
-//Similarly, lr026a (married or with partner) (Cramer V = 0.2243) is another variable with a very strong association. Similarly for cr056e (depression) (Cramer's V = 0.2107). 'maritalstatus' has a significant relationship (Chi2 = 8667.1682) and a moderate association (Cramer's V = 0.1351). ei002 (food insecurity) has a moderately strong association  with cr058.
+//Similarly, lr026a (married or with partner) (Cramer V = 0.2243) is another variable
+//with a very strong association. Similarly for cr056e (depression) (Cramer's V =
+//0.2107). 'maritalstatus' has a significant relationship (Chi2 = 8667.1682) and a
+//moderate association (Cramer's V = 0.1351). ei002 (food insecurity) has a moderately
+//strong association  with cr058.
 
-//There are some variables like lr026 (interaction with another person within 6 feet distance)(Cramer's V = 0.0319) where the association is weak but still statistically significant (p < 0.05). ei008 (owe money on student loans)(Cramer's V = 0.0795) and 'working' (Cramer V = 0.0680) both show moderate relationships with cr058.
+//There are some variables like lr026 (interaction with another person within 6 feet
+//distance)(Cramer's V = 0.0319) where the association is weak but still statistically
+//significant (p < 0.05). ei008 (owe money on student loans)(Cramer's V = 0.0795) and
+//'working' (Cramer V = 0.0680) both show moderate relationships with cr058.
 
-//gender and hhincome also show some moderate associations, indicating that these variables have a meaningful but not very strong relationship with cr058.
+//gender and hhincome also show some moderate associations, indicating that these
+//variables have a meaningful but not very strong relationship with cr058.
 
-//Overall, most of the associations between loneliness and the other variables are weak. We might be able to observe better associations by using regression modelling. However, as the data is panel data with multiple entries per respondent, we will perform longitudinal analysis.
+//Overall, most of the associations between loneliness and the other variables are weak.
+//We might be able to observe better associations by using regression modelling.
+//However, as the data is panel data with multiple entries per respondent, we will
+//perform longitudinal analysis.
 
 
 
-//set up panel. Unique identifier for each participant is uasid and the wave number is the time variable here
+//set up panel. Unique identifier for each participant is uasid and the wave number is
+//the time variable here
 //encode uasid to a numeric identifier as it is currently string
 encode uasid, generate(uasid_num)
 xtset uasid_num wave
@@ -84,25 +101,56 @@ duplicates report uasid_num wave
 
 xtreg cr058 cr054s9 lr026a cr056e, fe
 
-//The Rsquared value of this model is quite low (0.0578) which means taht the model explains only 5.8% of the total variance in loneliness across individuals in different waves of the survey. The within individual R2 is 0.0008, indicating that the model explains only a very small fraction of the variation in cr058 (loneliness) within individuals over time. The between individual R2 is 0.0848, suggesting that there is a stronger relationship between individuals (differences in their average levels of loneliness).
+//The Rsquared value of this model is quite low (0.0578) which means taht the model
+//explains only 5.8% of the total variance in loneliness across individuals in different
+//waves of the survey. The within individual R2 is 0.0008, indicating that the model
+//explains only a very small fraction of the variation in cr058 (loneliness) within
+//individuals over time. The between individual R2 is 0.0848, suggesting that there is a
+//stronger relationship between individuals (differences in their average levels of loneliness).
 
-//For cr054s9 (existing mental health condition), although the coefficient (-0.6) indicates that having a mental health condition is associated with a decrease in loneliness (cr058), the p-value of 0.228 shows that this result is not statistically significant. 
+//For cr054s9 (existing mental health condition), although the coefficient (-0.6)
+//indicates that having a mental health condition is associated with a decrease in
+//loneliness (cr058), the p-value of 0.228 shows that this result is not statistically significant. 
 
-//Being married or having a partner(lr026a) is associated with a 0.112 increase in loneliness (cr058), which is statistically significant (p < 0.001). This might seem counterintuitive, but it could suggest that people who are in relationships experience loneliness as well, possibly due to relationship dynamics or other factors.
+//Being married or having a partner(lr026a) is associated with a 0.112 increase in
+//loneliness (cr058), which is statistically significant (p < 0.001). This might seem
+//counterintuitive, but it could suggest that people who are in relationships experience
+//loneliness as well, possibly due to relationship dynamics or other factors.
 
-//There is a positive association between cr056e (depression) and loneliness, suggesting that those experiencing depression tend to report higher loneliness scores. The p-value of 0.084 indicates this result is not significant.
+//There is a positive association between cr056e (depression) and loneliness, suggesting
+//that those experiencing depression tend to report higher loneliness scores. The
+//p-value of 0.084 indicates this result is not significant.
 
-//A rho value of 0.824 indicates that 82.4% of the total variance is due to differences between individuals rather than fluctuations within individuals over time. This suggests that individual specific traits (unobserved) explain much of the variation in loneliness. The overall explanatory power of the model is quite low, which suggests that loneliness is influenced by other factors not captured in this model and we would need to add more variables to the model.
+//A rho value of 0.824 indicates that 82.4% of the total variance is due to differences
+//between individuals rather than fluctuations within individuals over time. This
+//suggests that individual specific traits (unobserved) explain much of the variation in
+//loneliness. The overall explanatory power of the model is quite low, which suggests
+//that loneliness is influenced by other factors not captured in this model and we would
+//need to add more variables to the model.
 
 
 xtreg cr058 cr054s9 lr026a cr056e gender hhincome disabled, fe
 
-//the explained variance of this model is still low. Significant factors affecting loneliness in this model include being married or partnered, gender, and household income. cr054s9, depression (cr056e), and disability status did not show statistically significant relationships with loneliness. Gender and income seem to have negative associations with loneliness (males and those with higher incomes report lower loneliness), while being in a relationship surprisingly appears to increase loneliness slightly, which contradicts the initial correlation analysis.
+//the explained variance of this model is still low. Significant factors affecting
+//loneliness in this model include being married or partnered, gender, and household
+//income. cr054s9, depression (cr056e), and disability status did not show statistically
+//significant relationships with loneliness. Gender and income seem to have negative
+//associations with loneliness (males and those with higher incomes report lower
+//loneliness), while being in a relationship surprisingly appears to increase loneliness
+//slightly, which contradicts the initial correlation analysis.
 
 
 xtreg cr058 cr054s9 lr026a cr056e gender hhincome ei002 ei008 ei014 lr026, fe
 
-//The Rsquared value of this model is quite low (0.016) indicating that it is unable to explain most of the variancce in the model. The variables cr054s9 and cr056e were omitted due to collinearity, suggesting that other included variables may overlap in what they explain, which could limit the model's interpretability regarding mental health conditions and depression. Variables like gender, household income, food insecurity(ei002), owing student loans (ei008) and renting status(ei014) are significant in this model. Higher food insecurity is associated with increased loneliness, with a decrease of 0.052 in loneliness for each unit increase in food insecurity. The model also indicates that higher income is associated with lower loneliness. 
+//The Rsquared value of this model is quite low (0.016) indicating that it is unable to
+//explain most of the variancce in the model. The variables cr054s9 and cr056e were
+//omitted due to collinearity, suggesting that other included variables may overlap in
+//what they explain, which could limit the model's interpretability regarding mental
+//health conditions and depression. Variables like gender, household income, food
+//insecurity(ei002), owing student loans (ei008) and renting status(ei014) are
+//significant in this model. Higher food insecurity is associated with increased
+//loneliness, with a decrease of 0.052 in loneliness for each unit increase in food
+//insecurity. The model also indicates that higher income is associated with lower loneliness. 
 
 
 
@@ -110,10 +158,53 @@ xtreg cr058 lr026a cr056e gender hhincome ei002 ei008 ei014 cr056g cr056c cr056a
 //cr056a (anxiety disorder) and maritalstatus are not significant in this model.
 
 
-xtreg cr058 lr026a cr054s9 gender hhincome ei002 ei008 ei014, fe
+xtreg cr058 lr026a cr056e gender hhincome ei002 ei008 ei014, fe
+est store fe //store the estimates
 
+//all of these fixed effects models have a very low R2 value. Unlike
+//FE models, random effects models account for both within ndividual and between
+//individual variations. Since loneliness is influenced by various personal
+//characteristics, these between person differences might be important.
 
+xtreg cr058 lr026a cr056e gender hhincome ei002 ei008 ei014, re
+est store re
 
+//the R squared value for the RE model is 0.1097. The model explains about 11% of the
+//total variance in loneliness), which is better than the fixed effects models. Although
+//the r2 value is better in the RE model, this doesn't automatically mean that the RE
+//model is more appropriate.
 
-xtreg cr058 cr054s9 lr026a cr056e gender hhincome disabled ei002 working ei008 ei014 lr026, fe
+//to choose between the RE and FE model, we perform the Hausman test
+
+hausman fe re, sigmamore
+
+//The Hausman test is used in panel data analysis to decide between fixed effects and
+//random effects models. It tests whether the unique errors (the unobserved individual
+//effects) are correlated with the regressors. The FE model assumes that individual
+//specific effects are correlated with the independent variables. The RE model assumes
+//that individual specific effects are uncorrelated with the independent variables. The
+//Hausman test checks if the preferred model is the RE model. The null hypothesis is
+//that the preferred model is RE, and the alternative hypothesis is that the preferred
+//model is FE.
+
+//The RE model assumes that the individual specific effects (ui) are not correlated with
+//the independent variables. The ui are intrinsic factors like personality traits,
+//long-term health conditions, biological gender etc that don't change over time but
+//differ between individuals. If this assumption is violated, the RE model produces
+//biased estimates, even if its R squared is higher. The Hausman test tests whether the
+//individual specific effects (ui) are correlated with the independent variables.
+
+//Here, the test result showed a significant difference between the FE and RE models
+//(p-value = 0), indicating that the RE model is likely violating its assumption of no
+//correlation between the (ui) and the regressors. The higher r2 is not valid due to the
+//biased results. Further, r2 measures how well the model explains the variance in the
+//dependent variable. A high R square can still be produced by a model that provides
+//biased estimates if the assumptions of the model are not met.
+
+//FE models control unobserved individual specific effects and assume that these
+//unobserved factors are correlated with the independent variables, which seems to be
+//the case here and as indicated by the Hausman test. The FE sacrifices the r2 and
+//overall fit to produce unbiased and consistent estimates when the assumption of no
+//correlation is violated.
+
 
