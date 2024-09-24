@@ -67,25 +67,20 @@ matrix list results
 
 
 
+//set up panel. Unique identifier for each participant is uasid and the wave number is the time variable here
+//encode uasid to a numeric identifier as it is currently string
+encode uasid, generate(uasid_num)
+xtset uasid_num wave
+
+//summary of cr058 by wave
+tabstat cr058, by(wave) stats(mean sd min max n)
+
+//check for duplicates
+duplicates report uasid_num wave
+//no duplicates found
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//set up panel
-xtset uasid wave
 
 
 
