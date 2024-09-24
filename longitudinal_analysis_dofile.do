@@ -15,88 +15,48 @@ count
 //to test the presence of association and then test the strength of the association with
 //Cramer's V
 
-//check association between cr058 (loneliness) and hhincome
-tabulate cr058 hhincome, chi2
-//cr058 and marital status
-tabulate cr058 maritalstatus, chi2
-//cr058 and education level
-tabulate cr058 education, chi2
-//cr058 and retirement status
-tabulate cr058 retired, chi2
-//cr058 and race
-tabulate cr058 race, chi2
-//cr058 and disabled (y/n)
-tabulate cr058 disabled, chi2
-//cr058 and gender
-tabulate cr058 gender, chi2
-//cr058 and hhmembernumber
-tabulate cr058 hhmembernumber, chi2
-//cr058 and coping_socmedia
-tabulate cr058 coping_socmedia, chi2
-//cr058 and coping_drinking
-tabulate cr058 coping_drinking, chi2
-//cr058 and coping_cigarettes
-tabulate cr058 coping_cigarette, chi2
-//cr058 and coping_drugs
-tabulate cr058 coping_drugs, chi2
-//cr058 and working
-tabulate cr058 working, chi2
-//cr058 and cr056a (Anxiety disorder)
-tabulate cr058 cr056a, chi2
-//cr058 and cr056b (ADHD)
-tabulate cr058 cr056b, chi2
-//cr058 and cr056c (Bipolar disorder)
-tabulate cr058 cr056c, chi2
-//cr058 and cr056d (Eating disorder)
-tabulate cr058 cr056d, chi2
-//cr058 and cr056e (Depression)
-tabulate cr058 cr056e, chi2
-//cr058 and cr056f (OCD)
-tabulate cr058 cr056f, chi2
-//cr058 and cr056g (PTSD)
-tabulate cr058 cr056g, chi2
-//cr058 and cr056h (Schizophrenia)
-tabulate cr058 cr056h, chi2
-//cr058 and cr056i (Other mental issue)
-tabulate cr058 cr056i, chi2
-//cr058 and cr054s1 (Diabetes)
-tabulate cr058 cr054s1, chi2
-//cr058 and cr054s2 (Cancer)
-tabulate cr058 cr054s2, chi2
-//cr058 and cr054s3 (Heart disease)
-tabulate cr058 cr054s3, chi2
-//cr058 and cr054s4 (High blood pressure)
-tabulate cr058 cr054s4, chi2
-//cr058 and cr054s5 (Asthma)
-tabulate cr058 cr054s5, chi2
-//cr058 and cr054s6 (Chronic lung disease)
-tabulate cr058 cr054s6, chi2
-//cr058 and cr054s7 (Kidney disease)
-tabulate cr058 cr054s7, chi2
-//cr058 and cr054s8 (Autoimmune disorder)
-tabulate cr058 cr054s8, chi2
-//cr058 and cr054s9 (A mental health condition)
-tabulate cr058 cr054s9, chi2
-//cr058 and cr054s10 (Obesity)
-tabulate cr058 cr054s10, chi2
-//cr058 and ei002 (worried you would run out of food)
-tabulate cr058 ei002, chi2
-//cr058 and ei005c (has social security)
-tabulate cr058 ei005c, chi2
-//cr058 and ei008 (has student loans)
-tabulate cr058 ei008, chi2
-//cr058 and ei014 (is renting)
-tabulate cr058 ei014, chi2
-//cr058 and healthinsurance
-tabulate cr058 healthinsurance, chi2
-//cr058 and lr026 (interaction with another person)
-tabulate cr058 lr026, chi2
-//cr058 and lr026a (married or with partner)
-tabulate cr058 lr026a, chi2
-//cr058 and lr031 (applied for unemployment benefit)
-tabulate cr058 lr031, chi2
-//cr058 and cr068s6 (religious or not)
-tabulate cr058 cr068s6, chi2
 
-//all of these variables show association with cr058. Now, let us do Cramer's V to test //the strength of the association
+
+//define a list of variables to test against cr058
+local varlist hhincome maritalstatus education retired race disabled gender hhmembernumber coping_socmedia coping_drinking coping_cigarette coping_drugs working cr056a cr056b cr056c cr056d cr056e cr056f cr056g cr056h cr056i cr054s1 cr054s2 cr054s3 cr054s4 cr054s5 cr054s6 cr054s7 cr054s8 cr054s9 cr054s10 ei002 ei005c ei008 ei014 healthinsurance lr026 lr026a lr031 cr068s6
+
+//define number of variables
+local numvars : word count `varlist'
+//create a matrix to store results 
+matrix results = J(`numvars', 3, .)
+local i = 1
+
+//loop through each variable in the list and perform the Chi square test, and calculate Cramer's V
+foreach var of local varlist {
+    di "Calculating Cramer's V between cr058 and `var'"
+    quietly tabulate cr058 `var', chi2 expected
+    
+    //calculate Cramér's V
+    local chi2 = r(chi2)  //get chi2 value
+    local pvalue = r(p)  //extract p-value
+    local N = r(N)
+    local min_dim = min(r(r), r(c)) - 1
+    local cramer_v = sqrt(`chi2' / (`N' * `min_dim'))
+    
+    //store the results
+    matrix results[`i', 1] = `chi2'
+    matrix results[`i', 2] = `pvalue'
+    matrix results[`i', 3] = `cramer_v'
+    
+    local i = `i' + 1
+}
+
+//add row and column names to the matrix
+matrix rownames results = hhincome maritalstatus education retired race disabled gender hhmembernumber coping_socmedia coping_drinking coping_cigarette coping_drugs working cr056a cr056b cr056c cr056d cr056e cr056f cr056g cr056h cr056i cr054s1 cr054s2 cr054s3 cr054s4 cr054s5 cr054s6 cr054s7 cr054s8 cr054s9 cr054s10 ei002 ei005c ei008 ei014 healthinsurance lr026 lr026a lr031 cr068s6
+matrix colnames results = chi2 p_value cramer_v
+//display
+matrix list results
+
+
+
+
+
+
+
+
 
