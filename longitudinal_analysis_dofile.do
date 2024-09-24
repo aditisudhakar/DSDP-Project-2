@@ -1,3 +1,12 @@
+*======================================================================================
+*
+//This file deals with correlation analysis, mixed effects modelling and longitudinal modelling.
+//Please refer to Python file first for exploratory analysis before reading through this file.
+*
+*======================================================================================
+
+
+
 use "C:\Users\medasud\Downloads\DSDP Project 2 Loneliness\covidpanel_us_stata_jan_17_2023.dta", clear
 
 describe cr058
@@ -178,6 +187,13 @@ est store re
 
 hausman fe re, sigmamore
 
+
+//Null Hypothesis (H0): The difference in coefficients between the FE and RE models is
+//not systematic (RE is appropriate)
+//Ha: The difference in coefficients is systematic (FE is more appropriate)
+//Since the p-value is 0, we reject the null hypothesis. This indicates that the FE
+//model is more appropriate than the RE model (RE)
+
 //The Hausman test is used in panel data analysis to decide between fixed effects and
 //random effects models. It tests whether the unique errors (the unobserved individual
 //effects) are correlated with the regressors. The FE model assumes that individual
@@ -186,6 +202,14 @@ hausman fe re, sigmamore
 //Hausman test checks if the preferred model is the RE model. The null hypothesis is
 //that the preferred model is RE, and the alternative hypothesis is that the preferred
 //model is FE.
+
+//Coefficients (b) are from the FE model
+//Coefficients (B) are from the RE Model (RE)
+
+//The (b-B) column shows the difference between the FE and RE coefficient estimates.
+//Significant differences between the two indicate that the RE estimator may be biased
+//due to correlation between individual specific effects and the regressors. For example, for gender, the difference between FE and RE estimates is quite large (-0.507),
+//suggesting that RE and FE provide very different results for this variable.
 
 //The RE model assumes that the individual specific effects (ui) are not correlated with
 //the independent variables. The ui are intrinsic factors like personality traits,
@@ -206,5 +230,22 @@ hausman fe re, sigmamore
 //the case here and as indicated by the Hausman test. The FE sacrifices the r2 and
 //overall fit to produce unbiased and consistent estimates when the assumption of no
 //correlation is violated.
+
+
+
+//The FE model focuses on within individual variation and strips away the between
+//individual variation, which often explains much more of the variation in the dependent
+//variable (loneliness). The FE model is only explaining changes within each respondent
+//over time and not differences between individuals.
+
+//To fix this, we can try lagged variables. Sometimes, effects of variables like income,
+//health conditions, or mental health don't appear immediately but have a delayed impact.
+
+
+
+
+
+
+
 
 
