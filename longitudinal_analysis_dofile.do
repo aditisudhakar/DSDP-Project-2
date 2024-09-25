@@ -249,8 +249,8 @@ hausman fe re, sigmamore
 *
 *
 *
-								*Lagged Variables
-								*================
+						*Lagged Variables
+						*================
 
 
 //The FE model focuses on within individual variation and strips away the between
@@ -315,8 +315,8 @@ xtreg cr058 L2.cr058 L.lr026a L2.lr026a L.cr056e L.hhincome L2.hhincome L.ei002 
 *
 *
 *
-									*Discussion
-									*==========
+							*Discussion
+							*==========
 						
 //Most healthcare systems, including the NHS do not have provisions for recording
 //loneliness as part of routine data. This creates a gap between exploring the
