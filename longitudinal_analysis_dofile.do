@@ -249,8 +249,8 @@ hausman fe re, sigmamore
 *
 *
 *
-							*Lagged Variables
-							*================
+								*Lagged Variables
+								*================
 
 
 //The FE model focuses on within individual variation and strips away the between
@@ -285,13 +285,56 @@ xtreg cr058 L.cr058 lr026a cr056e hhincome ei002 ei008 ei014, fe
 //persistence or autocorrelation in the outcome as well as L.cr058 does.
 
 
+//we can test the persistence by introducing a lagged variable over another time unit 
+//(2 waves back).
+
 xtreg cr058 L.cr058 L2.cr058 L.lr026a L2.lr026a L.cr056e L.hhincome L2.hhincome L.ei002 L2.ei002 L.ei008 L2.ei008 L.ei014 L2.ei014, fe
 
+//The results show that cr058 has strong persistence across multiple periods, meaning
+//past values significantly predict future values. The effect is stronger for the 1st
+//lag compared to the 2nd lag
+//For lr026a (having a partner), L.lr026a is significant (p = 0), meaning having a
+//partner in the previous period positively impacts cr058 (loneliness). This effect fades
+//in the 2nd lag L2.lr026awhere the coefficient = 0.016 is diminished and not significant (p = 0.234).
+//Household income does not have significant lagged results, but the lagged effects of
+//food insecurity (ei002) is significant in the first wave. For some variables like
+//ei014 (primary residence is rented), there is no significant effect in the first lag,
+//but in the second lag, the effect of L2.ei014 is significant (p = 0.035). This
+//suggests that renting status from two periods ago has a negative effect on cr058,
+//which becomes apparent only after some delay.
+
+xtreg cr058 L.lr026a L2.lr026a L.cr056e L.hhincome L2.hhincome L.ei002 L2.ei002 L.ei008 L2.ei008 L.ei014 L2.ei014, fe
+
+xtreg cr058 L2.cr058 L.lr026a L2.lr026a L.cr056e L.hhincome L2.hhincome L.ei002 L2.ei002 L.ei008 L2.ei008 L.ei014 L2.ei014, fe
+
+//However, removing the lagged variable on cr058 from the model again diminishes the
+//model's performance. This again indicates that the loneliness variable requires previous
+//history of loneliness in order to predict it (knowlegde of previous mental health for example).
+
+
+*
+*
+*
+									*Discussion
+									*==========
+						
+//Most healthcare systems, including the NHS do not have provisions for recording
+//loneliness as part of routine data. This creates a gap between exploring the
+//contributors to loneliness. Further, if a past history of experiencing loneliness is 
+//required to predict loneliness in the future, and if there are no methods of measuring
+//loneliness, it is difficult to create prediction models and systems to predic loneliness.
+
+//The loneliness variable here seems to be endogenous (correlated with a past version of 
+//itself. This can also be due to omitted variables (like depression) that affect both the dependent and independent variables. Although the models omitted the depression variable due to multicollinearity, depression has a strong relation with loneliness.
+
+//Performing mental health surveys that record questions pertaining to loneliness as
+//part of routine GP appointments/recording mental wellbeing outside mental health
+//appointments could help discover stronger associations between mental and physical
+//health and drive research in the area.
+
+
+							
 
 
 
-
-
-
-Dynamic panel models (like the Arellano-Bond estimator) could be useful if you're concerned about the endogeneity of lagged dependent variables.
 
