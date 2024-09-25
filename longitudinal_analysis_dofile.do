@@ -17,13 +17,16 @@ tabulate cr058
 misstable summarize cr058
 drop if missing(cr058)
 count
-
+*
+*
+*
+					*Chi-Square Test and Cramer's V
+					*==============================
 
 //all the variables are categorical. To check the correlation, we cannot use Pearson's
 //correlation for this as the data is not numeric data. instead, we use chi square tests
 //to test the presence of association and then test the strength of the association with
 //Cramer's V
-
 
 
 //define a list of variables to test against cr058
@@ -90,7 +93,11 @@ matrix list results
 //However, as the data is panel data with multiple entries per respondent, we will
 //perform longitudinal analysis.
 
-
+*
+*
+*
+				*Longitudinal Analysis with Mixed Effects Modelling
+				*==================================================
 
 //set up panel. Unique identifier for each participant is uasid and the wave number is
 //the time variable here
@@ -185,6 +192,13 @@ est store re
 
 //to choose between the RE and FE model, we perform the Hausman test
 
+*
+*
+*
+							*Hausman-Wu Test
+							*===============
+
+
 hausman fe re, sigmamore
 
 
@@ -232,6 +246,12 @@ hausman fe re, sigmamore
 //correlation is violated.
 
 
+*
+*
+*
+							*Lagged Variables
+							*================
+
 
 //The FE model focuses on within individual variation and strips away the between
 //individual variation, which often explains much more of the variation in the dependent
@@ -241,6 +261,31 @@ hausman fe re, sigmamore
 //To fix this, we can try lagged variables. Sometimes, effects of variables like income,
 //health conditions, or mental health don't appear immediately but have a delayed impact.
 
+xtset uasid_num wave
+xtreg cr058 L.lr026a L.cr056e L.hhincome L.ei002 L.ei008 L.ei014, fe
+
+//creating lagged variables on the independent variables does not significantly improve
+//the performance of the model. However, introducing the lagged variable for cr058
+//(loneliness) as an independent variable improves the R2 significant.
+
+
+xtreg cr058 L.cr058 lr026a cr056e hhincome ei002 ei008 ei014, fe
+
+//R2 measures the proportion of variance in the dependent variable (cr058) that is
+//explained by the independent variables in the model. When we include L.cr058, we're
+//allowing the model to directly explain a large portion of the variation in current
+//cr058 based on its past values. This significantly boosts the explanatory power of the
+//model due to autocorrelation (the current value is highly predictable from past values).
+//This is common in panel data. The variable is also persistent. It's likely that
+//someone's mental helath is strongly related to their past condition. 
+
+//Without L.cr058, the model has to rely solely on the other independent variables
+//(income, marital status, food insecurity etc) to explain the variation in cr058. These
+//variables seem to have limited explanatory power and they cannot account for the
+//persistence or autocorrelation in the outcome as well as L.cr058 does.
+
+
+xtreg cr058 L.cr058 L2.cr058 L.lr026a L2.lr026a L.cr056e L.hhincome L2.hhincome L.ei002 L2.ei002 L.ei008 L2.ei008 L.ei014 L2.ei014, fe
 
 
 
@@ -248,4 +293,5 @@ hausman fe re, sigmamore
 
 
 
+Dynamic panel models (like the Arellano-Bond estimator) could be useful if you're concerned about the endogeneity of lagged dependent variables.
 
