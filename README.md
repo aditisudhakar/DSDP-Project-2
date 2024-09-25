@@ -9,3 +9,6 @@ By gaining deeper insights into loneliness characteristics, it aims to propose e
 
 ## Data: 
 The dataset is from the COVID-19 Panel dataset of the Understanding America Survey (UAS) AND can be access from https://uasdata.usc.edu/index.php upon request.
+
+## Files:
+The project is split into two files: the initial analysis is in Python followed by the modelling in STATA.
